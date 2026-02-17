@@ -1,0 +1,134 @@
+---
+"$schema": https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+blocks:
+- alignment: left
+  segments:
+  - type: os
+    style: diamond
+    background: "#29315A"
+    foreground: "#43CCEA"
+    leading_diamond: ""
+    template: "{{.Icon}} "
+    foreground_templates:
+    - "{{if .WSL}}#FF9248{{end}}"
+  - background: "#29315A"
+    foreground: "#3EC669"
+    properties:
+      max_depth: 6
+      style: agnoster_short
+      folder_separator_icon: " › "
+      mapped_locations:
+        "/mnt/c/Users/MaximilianWalz": WinHome
+      cycle:
+      - "#FF9248"
+      - "#B388FF"
+      - "#43CCEA"
+      - "#63F08C"
+      - "#FED142"
+      - "#DE3F24"
+      - "#4063D8"
+      - "#88e570"
+      - "#63F08C"
+    style: diamond
+    template: " {{ .Path }}"
+    trailing_diamond: ""
+    type: path
+  - background: "#29315A"
+    foreground: "#43CCEA"
+    foreground_templates:
+    - "{{ if or (.Working.Changed) (.Staging.Changed) }}#FF9248{{ end }}"
+    - "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#ff4500{{ end }}"
+    - "{{ if gt .Ahead 0 }}#B388FF{{ end }}"
+    - "{{ if gt .Behind 0 }}#B388FF{{ end }}"
+    leading_diamond: " "
+    properties:
+      branch_max_length: 25
+      fetch_stash_count: true
+      fetch_status: true
+      fetch_upstream_icon: true
+    style: diamond
+    template: "{{ .UpstreamIcon }} {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus
+      }}{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and
+      (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}
+       {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }}  {{ .StashCount }}{{
+      end }}"
+    trailing_diamond: ""
+    type: git
+  - foreground: "#C94A16"
+    style: plain
+    template: " x"
+    type: status
+  - foreground: "#888888"
+    style: plain
+    template: " {{ .FormattedMs }} "
+    type: executiontime
+  type: prompt
+- alignment: right
+  segments:
+  - type: node
+    style: plain
+    foreground: "#88e570"
+    properties:
+      display_mode: files
+      fetch_package_manager: true
+      fetch_version: true
+      npm_icon: "<#e5272d> npm</> "
+      yarn_icon: "<#37aee5> yarn</> "
+      pnpm_icon: "<#e5a100>\U000F02C1 pnpm</> "
+    template: "{{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }} {{
+      .Full }}"
+  - foreground: "#4063D8"
+    properties:
+      display_mode: files
+      fetch_version: true
+    style: plain
+    template: " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}"
+    type: crystal
+  - foreground: "#DE3F24"
+    properties:
+      display_mode: files
+      fetch_version: true
+    style: plain
+    template: " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}"
+    type: ruby
+  - foreground: "#4063D8"
+    properties:
+      display_mode: files
+      fetch_version: true
+    style: plain
+    template: " {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}"
+    type: java
+  - foreground: "#906cff"
+    properties:
+      display_mode: files
+      fetch_version: true
+    style: plain
+    template: " <b>K</b>{{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} "
+    type: kotlin
+  - foreground: "#FED142"
+    properties:
+      display_mode: environment
+      fetch_virtual_env: true
+      folder_name_fallback: false
+    style: plain
+    template: " {{ if .Venv }}{{ .Venv }} {{ .Full }}{{ end }} "
+    type: python
+  - type: deno
+    style: plain
+    foreground: "#3C82F6"
+    template: "  {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} "
+  type: prompt
+- alignment: left
+  newline: true
+  segments:
+  - foreground: "#63F08C"
+    style: plain
+    template: "➜ "
+    type: text
+  type: prompt
+transient_prompt:
+  foreground: "#63F08C"
+  style: plain
+  template: "➜ "
+  type: text
+version: 3
