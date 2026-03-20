@@ -3,6 +3,13 @@
 blocks:
 - alignment: left
   segments:
+  - type: session
+    style: diamond
+    background: "#29315A"
+    foreground: "#43CCEA"
+    leading_diamond: ""
+    trailing_diamond: " "
+    template: "{{ if .SSHSession }} {{ .HostName }}{{ end }}"
   - type: os
     style: diamond
     background: "#29315A"
