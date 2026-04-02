@@ -1,0 +1,65 @@
+# Firefox user.js template for chezmoi
+# ===================== SECRETS (via Bitwarden) =====================
+# Using Bitwarden item "Mozilla", login.username stores your FXA email
+# ===================================================
+
+{{ $fxa_email := (bitwarden "item" "Mozilla").login.username }}
+
+# ===================== General UI =====================
+user_pref("browser.aboutConfig.showWarning", false);
+user_pref("browser.startup.homepage_override.mstone", "148.0.2");
+user_pref("browser.theme.content-theme", 0);
+user_pref("browser.theme.toolbar-theme", 0);
+user_pref("ui.key.menuAccessKeyFocuses", false);
+
+# ===================== Bookmarks =====================
+user_pref("browser.bookmarks.restore_default_bookmarks", false);
+user_pref("browser.bookmarks.showMobileBookmarks", false);
+user_pref("browser.toolbarbuttons.introduced.sidebar-button", true);
+user_pref("browser.toolbars.bookmarks.visibility", "always");
+
+# ===================== Downloads =====================
+user_pref("browser.download.deletePrivate.chosen", true);
+user_pref("browser.download.panel.shown", true);
+user_pref("browser.download.viewableInternally.typeWasRegistered.avif", true);
+user_pref("browser.download.viewableInternally.typeWasRegistered.webp", true);
+
+# ===================== Privacy & Containers =====================
+user_pref("privacy.userContext.enabled", true);
+user_pref("privacy.userContext.ui.enabled", true);
+user_pref("privacy.userContext.extension", "CookieAutoDelete@kennydo.com");
+user_pref("signon.rememberSignons", false);
+user_pref("network.dns.disablePrefetch", true);
+user_pref("network.prefetch-next", false);
+user_pref("privacy.clearOnShutdown_v2.formdata", true);
+
+# ===================== New Tab & Homepage =====================
+user_pref("browser.newtabpage.activity-stream.feeds.topsites", false);
+user_pref("browser.newtabpage.disableNewTabAsAddon", true);
+user_pref("browser.newtabpage.pinned", "[]");
+
+# ===================== Firefox View & Sidebar =====================
+user_pref("browser.profiles.enabled", true);
+user_pref("sidebar.new-sidebar.has-used", true);
+user_pref("sidebar.visibility", "hide-sidebar");
+
+# ===================== Media =====================
+user_pref("media.eme.enabled", true);
+user_pref("media.gmp-gmpopenh264.abi", "x86_64-gcc3");
+user_pref("media.videocontrols.picture-in-picture.video-toggle.has-used", true);
+
+# ===================== FXA & Sync =====================
+{% if $fxa_email %}
+user_pref("identity.fxaccounts.account.enabled", true);
+user_pref("identity.fxaccounts.email", "{{ $fxa_email }}");
+user_pref("identity.fxaccounts.toolbar.accessed", true);
+{% else %}
+user_pref("identity.fxaccounts.toolbar.accessed", true);
+{% endif %}
+
+# ===================== DevTools =====================
+user_pref("devtools.everOpened", true);
+
+# ===================== PDFs =====================
+user_pref("pdfjs.enableAltTextForEnglish", true);
+user_pref("pdfjs.enabledCache.state", true);

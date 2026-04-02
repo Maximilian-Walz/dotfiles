@@ -1,0 +1,118 @@
+# Thunderbird user.js template for chezmoi
+# ===================== SECRETS (via Bitwarden) =====================
+# These Bitwarden items should exist:
+#   Thunderbird Secrets/Fullname        -> full name
+#   Thunderbird Secrets/Email           -> email address
+#   Thunderbird Secrets/Username        -> usually same as email
+#   Thunderbird Secrets/IMAP_Host       -> IMAP server hostname
+#   Thunderbird Secrets/SMTP_Host       -> SMTP server hostname
+#   Thunderbird Secrets/SMTP_Port       -> SMTP port (default 465)
+# ===================================================
+
+{{ $paths := dict
+    "fcc" "/Sent"
+    "archive" "/Archives"
+    "draft" "/Drafts"
+    "templates" "/Templates"
+    "spam" "/Spam"
+}}
+
+{{ $item := bitwardenFields "item" "Thunderbird Secrets" }}
+{{ $fullname := $item.Fullname.value }}
+{{ $email := $item.Email.value }}
+{{ $username := $item.Username.value }}
+{{ $imap_host := $item.IMAP_Host.value }}
+{{ $smtp_host := $item.SMTP_Host.value }}
+{{ $smtp_port := $item.SMTP_Port.value }}
+{{ $email_encoded := $email | urlquery }}
+
+# ===================== General =====================
+user_pref("browser.theme.content-theme", 0);
+user_pref("browser.theme.toolbar-theme", 0);
+user_pref("mailnews.start_page.enabled", false);
+
+# ===================== Accounts =====================
+user_pref("mail.accountmanager.defaultaccount", "account1");
+user_pref("mail.accountmanager.accounts", "account1,account3,account2");
+user_pref("mail.accountmanager.localfoldersserver", "server5");
+user_pref("mail.account.account1.identities", "id1");
+user_pref("mail.account.account1.server", "server4");
+user_pref("mail.account.account2.server", "server5");
+user_pref("mail.account.account3.server", "server6");
+
+# ===================== Identity =====================
+user_pref("mail.identity.id1.fullName", "{{ $fullname }}");
+user_pref("mail.identity.id1.useremail", "{{ $email }}");
+user_pref("mail.identity.id1.compose_html", true);
+user_pref("mail.identity.id1.doBcc", false);
+user_pref("mail.identity.id1.reply_on_top", 1);
+user_pref("mail.identity.id1.autoEncryptDrafts", true);
+user_pref("mail.identity.id1.attachPgpKey", true);
+user_pref("mail.identity.id1.sendAutocryptHeaders", true);
+user_pref("mail.identity.id1.protectSubject", true);
+
+user_pref("mail.identity.id1.fcc_folder", "imap://{{ $email_encoded }}@{{ $imap_host }}{{ $paths.fcc }}");
+user_pref("mail.identity.id1.archive_folder", "imap://{{ $email_encoded }}@{{ $imap_host }}{{ $paths.archive }}");
+user_pref("mail.identity.id1.draft_folder", "imap://{{ $email_encoded }}@{{ $imap_host }}{{ $paths.draft }}");
+user_pref("mail.identity.id1.stationery_folder", "imap://{{ $email_encoded }}@{{ $imap_host }}{{ $paths.templates }}");
+user_pref("mail.identity.id1.smtpServer", "smtp1");
+user_pref("mail.identity.id1.valid", true);
+
+# ===================== Servers =====================
+user_pref("mail.server.server4.type", "imap");
+user_pref("mail.server.server4.userName", "{{ $username }}");
+user_pref("mail.server.server4.hostname", "{{ $imap_host }}");
+user_pref("mail.server.server4.port", 993);
+user_pref("mail.server.server4.socketType", 3);
+user_pref("mail.server.server4.login_at_startup", true);
+user_pref("mail.server.server4.ageLimit", 30);
+user_pref("mail.server.server4.numHdrsToKeep", 2000);
+user_pref("mail.server.server4.fcc_folder", "imap://{{ $email_encoded }}@{{ $imap_host }}{{ $paths.fcc }}");
+user_pref("mail.server.server4.spamActionTargetFolder", "imap://{{ $email_encoded }}@{{ $imap_host }}{{ $paths.spam }}");
+
+user_pref("mail.server.server5.type", "none"); # Local Folders
+user_pref("mail.server.server5.hostname", "Local Folders");
+
+user_pref("mail.server.server6.type", "none"); # Smart Folders
+user_pref("mail.server.server6.hostname", "smart mailboxes");
+user_pref("mail.server.server6.hidden", true);
+
+# ===================== SMTP =====================
+user_pref("mail.smtpservers", "smtp1");
+user_pref("mail.smtpserver.smtp1.hostname", "{{ $smtp_host }}");
+user_pref("mail.smtpserver.smtp1.port", {{ $smtp_port }});
+user_pref("mail.smtpserver.smtp1.try_ssl", 3);
+user_pref("mail.smtpserver.smtp1.authMethod", 3);
+user_pref("mail.smtpserver.smtp1.username", "{{ $username }}");
+
+# ===================== Calendar =====================
+user_pref("calendar.timezone.local", "Europe/Berlin");
+user_pref("calendar.timezone.useSystemTimezone", true);
+user_pref("calendar.registry.e01c254c-2510-4f17-a1ab-ebc542b51120.name", "Home");
+user_pref("calendar.registry.e01c254c-2510-4f17-a1ab-ebc542b51120.type", "storage");
+user_pref("calendar.registry.e01c254c-2510-4f17-a1ab-ebc542b51120.disabled", true);
+user_pref("calendar.ui.version", 3);
+user_pref("calendar.list.sortOrder", "e01c254c-2510-4f17-a1ab-ebc542b51120");
+
+# ===================== UI =====================
+user_pref("extensions.activeThemeID", "thunderbird-compact-dark@mozilla.org");
+user_pref("mailnews.tags.$label1.tag", "Important");
+user_pref("mailnews.tags.$label1.color", "#FF0000");
+user_pref("mailnews.tags.$label2.tag", "Work");
+user_pref("mailnews.tags.$label2.color", "#FF9900");
+user_pref("mailnews.tags.$label3.tag", "Personal");
+user_pref("mailnews.tags.$label3.color", "#009900");
+user_pref("mailnews.tags.$label4.tag", "To Do");
+user_pref("mailnews.tags.$label4.color", "#3333FF");
+user_pref("mailnews.tags.$label5.tag", "Later");
+user_pref("mailnews.tags.$label5.color", "#993399");
+user_pref("mailnews.tags.version", 2);
+user_pref("mail.threadpane.listview", 1);
+user_pref("mail.pane_config.dynamic", 0);
+
+# ===================== Security =====================
+user_pref("mail.identity.id1.encryptionpolicy", 0);
+user_pref("mail.identity.id1.sign_mail", false);
+user_pref("mail.identity.id1.e2etechpref", 0);
+user_pref("mail.identity.id1.is_gnupg_key_id", true);
+user_pref("mailnews.headers.extraAddonHeaders", "autocrypt openpgp");
