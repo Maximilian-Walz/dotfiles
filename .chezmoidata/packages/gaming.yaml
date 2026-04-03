@@ -1,0 +1,5 @@
+optional: true
+
+common:
+  - steam
+  - discord

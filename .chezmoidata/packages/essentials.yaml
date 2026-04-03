@@ -1,0 +1,14 @@
+optional: false
+
+common:
+  - fish
+  - chezmoi
+  - micro
+  - bat
+  - fzf
+  - eza
+  - bitwarden-cli  
+
+debian: []
+
+arch: []
